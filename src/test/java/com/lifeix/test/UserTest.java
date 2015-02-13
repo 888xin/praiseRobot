@@ -1,7 +1,9 @@
 package com.lifeix.test;
 
+import com.lifeix.robot.dao.PointLikeAccountDao;
 import com.lifeix.robot.dao.PraiseUserDao;
 import com.lifeix.robot.dao.UserDao;
+import com.lifeix.robot.model.PointLikeAccount;
 import com.lifeix.robot.model.PraiseUser;
 import com.lifeix.robot.model.User;
 import com.lifeix.robot.util.ReadFile;
@@ -27,6 +29,7 @@ public class UserTest {
 
     private UserDao userDao ;
     private PraiseUserDao praiseUserDao ;
+    private PointLikeAccountDao pointLikeAccountDao ;
 
     @Before
     public void before(){
@@ -35,6 +38,7 @@ public class UserTest {
                 ,"classpath:conf/spring-mybatis.xml"});
         userDao = (UserDao) context.getBean("userDao");
         praiseUserDao = (PraiseUserDao) context.getBean("praiseUserDao");
+        pointLikeAccountDao = (PointLikeAccountDao) context.getBean("pointLikeAccountDao");
     }
 
     @Test
@@ -66,6 +70,22 @@ public class UserTest {
             praiseUser.setAccountid(Integer.valueOf(accountid));
             praiseUser.setSex(sex);
             praiseUserDao.insertPraiseUser(praiseUser);
+        }
+    }
+
+    @Test
+    public void addAllPointLikeAccount(){
+        File file = new File("C:\\Users\\Lifeix\\Desktop\\src\\新建文本文档 (2).txt");
+        String[] strs = ReadFile.readTxtByLine(file, "gbk");
+        for (int i = 0; i < strs.length; i++) {
+            String str[] = strs[i].split("\t");
+            String accountid = str[0].trim();
+            String sexStr = str[1].trim();
+            int sex = Integer.valueOf(sexStr);
+            PointLikeAccount pointLikeAccount = new PointLikeAccount();
+            pointLikeAccount.setPointAccountId(Long.valueOf(accountid));
+            pointLikeAccount.setPointGender(sex);
+            pointLikeAccountDao.insertpointLikeAccount(pointLikeAccount);
         }
     }
 
